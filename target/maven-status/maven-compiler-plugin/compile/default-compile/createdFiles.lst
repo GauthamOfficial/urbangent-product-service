@@ -1,0 +1,15 @@
+com\urbangent\productservice\dto\ProductResponse.class
+com\urbangent\productservice\service\ProductServiceImpl.class
+com\urbangent\productservice\config\SwaggerConfig.class
+com\urbangent\productservice\exception\GlobalExceptionHandler.class
+com\urbangent\productservice\entity\Category.class
+com\urbangent\productservice\dto\ProductResponse$ProductResponseBuilder.class
+com\urbangent\productservice\service\ProductService.class
+com\urbangent\productservice\dto\ProductRequest.class
+com\urbangent\productservice\controller\ProductController.class
+com\urbangent\productservice\entity\Product.class
+com\urbangent\productservice\ProductServiceApplication.class
+com\urbangent\productservice\exception\ProductNotFoundException.class
+com\urbangent\productservice\dto\ProductRequest$ProductRequestBuilder.class
+com\urbangent\productservice\entity\Product$ProductBuilder.class
+com\urbangent\productservice\repository\ProductRepository.class
