@@ -152,4 +152,76 @@ class ProductServiceImplTest {
 
         assertTrue(responses.isEmpty());
     }
+
+    @Test
+    void updateProduct_ExistingId_ReturnsUpdatedProduct() {
+        UUID id = UUID.randomUUID();
+
+        Product existing = Product.builder()
+                .productId(id)
+                .name("Old Shirt")
+                .category(Category.SHIRTS)
+                .unitPrice(new BigDecimal("29.99"))
+                .stock(10)
+                .build();
+
+        ProductRequest updateRequest = ProductRequest.builder()
+                .name("Updated Premium Shirt")
+                .description("Premium quality cotton shirt")
+                .category(Category.SHIRTS)
+                .unitPrice(new BigDecimal("49.99"))
+                .stock(25)
+                .size("L")
+                .color("Navy Blue")
+                .brand("UrbanGent Originals")
+                .material("100% Egyptian Cotton")
+                .build();
+
+        Product updatedProduct = Product.builder()
+                .productId(id)
+                .name("Updated Premium Shirt")
+                .description("Premium quality cotton shirt")
+                .category(Category.SHIRTS)
+                .unitPrice(new BigDecimal("49.99"))
+                .stock(25)
+                .size("L")
+                .color("Navy Blue")
+                .brand("UrbanGent Originals")
+                .material("100% Egyptian Cotton")
+                .build();
+
+        when(productRepository.findById(id)).thenReturn(Optional.of(existing));
+        when(productRepository.save(any(Product.class))).thenReturn(updatedProduct);
+
+        ProductResponse response = productService.updateProduct(id, updateRequest);
+
+        assertNotNull(response);
+        assertEquals("Updated Premium Shirt", response.getName());
+        assertEquals(new BigDecimal("49.99"), response.getUnitPrice());
+        assertEquals(25, response.getStock());
+        assertEquals("Navy Blue", response.getColor());
+
+        verify(productRepository).findById(id);
+        verify(productRepository).save(any(Product.class));
+}
+
+    @Test
+    void updateProduct_NonExistingId_ThrowsProductNotFoundException() {
+        UUID id = UUID.randomUUID();
+
+        ProductRequest request = ProductRequest.builder()
+                .name("Some Shirt")
+                .category(Category.SHIRTS)
+                .unitPrice(new BigDecimal("29.99"))
+                .stock(10)
+                .build();
+
+        when(productRepository.findById(id)).thenReturn(Optional.empty());
+
+        assertThrows(ProductNotFoundException.class,
+                () -> productService.updateProduct(id, request));
+
+        verify(productRepository).findById(id);
+        verify(productRepository, never()).save(any(Product.class));
+    }
 }

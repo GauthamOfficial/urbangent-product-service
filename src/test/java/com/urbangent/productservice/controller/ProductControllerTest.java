@@ -145,4 +145,42 @@ class ProductControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2));
     }
+
+    @Test
+        void updateProduct_ValidData_Returns200() throws Exception {
+        UUID id = UUID.randomUUID();
+
+        ProductRequest request = ProductRequest.builder()
+                .name("Updated Oxford Shirt")
+                .category(Category.SHIRTS)
+                .unitPrice(new BigDecimal("44.99"))
+                .stock(30)
+                .size("M")
+                .color("White")
+                .brand("UrbanGent")
+                .material("Cotton")
+                .build();
+
+        ProductResponse response = ProductResponse.builder()
+                .productId(id)
+                .name("Updated Oxford Shirt")
+                .category(Category.SHIRTS)
+                .unitPrice(new BigDecimal("44.99"))
+                .stock(30)
+                .size("M")
+                .color("White")
+                .brand("UrbanGent")
+                .material("Cotton")
+                .build();
+
+        when(productService.updateProduct(any(UUID.class), any(ProductRequest.class)))
+                .thenReturn(response);
+
+        mockMvc.perform(put("/api/products/{id}", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Updated Oxford Shirt"))
+                .andExpect(jsonPath("$.unitPrice").value(44.99));
+        }
 }
