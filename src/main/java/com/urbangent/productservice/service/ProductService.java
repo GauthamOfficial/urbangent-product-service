@@ -15,4 +15,6 @@ public interface ProductService {
     void deleteProductById(UUID id);
 
     List<ProductResponse> getAllProducts();
+
+    ProductResponse updateProduct(UUID id, ProductRequest request);
 }

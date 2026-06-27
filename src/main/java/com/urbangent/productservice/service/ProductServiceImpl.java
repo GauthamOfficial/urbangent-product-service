@@ -11,7 +11,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
+/**
+ * Implementation of the ProductService interface.
+ * Handles business logic for product catalog operations including
+ * CRUD operations and entity-to-DTO mapping.
+ */
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
@@ -72,4 +76,22 @@ public class ProductServiceImpl implements ProductService {
                 .material(product.getMaterial())
                 .build();
     }
+
+    @Override
+    public ProductResponse updateProduct(UUID id, ProductRequest request) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + id));
+        product.setName(request.getName());
+        product.setDescription(request.getDescription());
+        product.setCategory(request.getCategory());
+        product.setUnitPrice(request.getUnitPrice());
+        product.setStock(request.getStock());
+        product.setSize(request.getSize());
+        product.setColor(request.getColor());
+        product.setBrand(request.getBrand());
+        product.setMaterial(request.getMaterial());
+        Product updated = productRepository.save(product);
+        return mapToResponse(updated);
+    }
+
 }
